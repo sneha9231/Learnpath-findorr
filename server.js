@@ -2,14 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const groq = require('groq-sdk');
+const { Groq } = require('groq-sdk'); // Fixed import
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Initialize Groq client using your GROQ API key
-const groq = new Groq({
+const groqClient = new Groq({ // Fixed variable name
   apiKey: process.env.GROQ_API_KEY
 });
 
@@ -27,7 +27,7 @@ app.post('/api/chat', async (req, res) => {
     // Generate system prompt based on mode
     const systemPrompt = getSystemPrompt(mode);
     
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({ // Fixed variable name
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
@@ -57,7 +57,7 @@ app.post('/api/explainer', async (req, res) => {
 Break it down into intuitive parts. Use analogies, examples, and step-by-step explanations. Format your response using markdown.
 Make it feel like an interactive Khan Academy style lesson.`;
     
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({ // Fixed variable name
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
@@ -87,7 +87,7 @@ app.post('/api/mentor', async (req, res) => {
 Be supportive but also challenging. Ask thoughtful questions to deepen understanding. Provide specific resources and next steps.
 Format your response in a conversational, supportive tone.`;
     
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({ // Fixed variable name
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
@@ -117,7 +117,7 @@ app.post('/api/evaluation', async (req, res) => {
 Include a mix of multiple-choice, short answer, and problem-solving questions. Provide detailed explanations for each correct answer.
 Format the test with clear question numbering, difficulty indicators, and scoring guidance.`;
     
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({ // Fixed variable name
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
@@ -150,7 +150,7 @@ The user can dedicate ${hoursPerWeek} hours per week, starting from ${startDate}
 
 Create a week-by-week schedule with specific topics, estimated time commitments, and milestone goals. Format your response as HTML with appropriate classes for styling.`;
     
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({ // Fixed variable name
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
