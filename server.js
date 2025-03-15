@@ -18,6 +18,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/api/test', (req, res) => {
+  // Check if GROQ_API_KEY is present
+  const key = process.env.GROQ_API_KEY;
+
+  res.json({
+    keyPresent: !!key,            // true or false
+    keyLength: key ? key.length : 0 // length of the string
+  });
+});
+
+
 // /api/chat endpoint
 app.post('/api/chat', async (req, res) => {
   try {
