@@ -476,3 +476,4 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('start-date').value = dateString;
     }
 });
+
