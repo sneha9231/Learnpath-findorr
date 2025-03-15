@@ -219,11 +219,17 @@ header p {
 }
 
 .chat-input {
-    padding: 15px;
-    border-top: 1px solid var(--light-gray);
-    display: flex;
-    align-items: center;
+  padding: 15px;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;           /* Prevent shrinking */
+  position: sticky;         /* Make the input sticky */
+  bottom: 0;                /* Stick to the bottom */
+  background: #f9fafb;       /* Set a background color */
+  z-index: 10;              /* Ensure it stays on top */
 }
+
 
 .chat-input textarea {
     flex: 1;
