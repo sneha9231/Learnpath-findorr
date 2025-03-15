@@ -2,13 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const {Groq} = require('groq-sdk');
+const { Groq } = require('groq-sdk');
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Groq client using your GROQ API key
+// Initialize Groq client using your GROQ_API_KEY
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
@@ -51,7 +51,7 @@ app.post('/api/chat', async (req, res) => {
 // /api/explainer endpoint
 app.post('/api/explainer', async (req, res) => {
   try {
-    const {concept} = req.body;
+    const { concept } = req.body;
     
     const systemPrompt = `You are an expert educational explainer. Create an engaging, visual, and interactive explanation of the given concept.
 Break it down into intuitive parts. Use analogies, examples, and step-by-step explanations. Format your response using markdown.
@@ -61,7 +61,7 @@ Make it feel like an interactive Khan Academy style lesson.`;
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: "Create an engaging explainer for: ${concept} "}
+        { role: "user", content: `Create an engaging explainer for: ${concept}` }
       ],
       temperature: 1,
       max_completion_tokens: 1024,
@@ -121,7 +121,7 @@ Format the test with clear question numbering, difficulty indicators, and scorin
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: "Create a ${difficulty} level test for: ${topic}" }
+        { role: "user", content: `Create a ${difficulty} level test for: ${topic}` }
       ],
       temperature: 1,
       max_completion_tokens: 1024,
@@ -242,7 +242,7 @@ Your goal is to provide helpful, educational responses that expand the user's un
   }
 }
 
-// Make sure it's a GET route:
+// Test endpoint (GET)
 app.get('/api/test', (req, res) => {
   const key = process.env.GROQ_API_KEY;
   res.json({
@@ -250,7 +250,6 @@ app.get('/api/test', (req, res) => {
     keyLength: key ? key.length : 0
   });
 });
-
 
 // Serve the main HTML file for all non-API routes
 app.get('*', (req, res) => {
@@ -264,6 +263,6 @@ if (process.env.VERCEL) {
 } else {
   // If running locally, start the server normally
   app.listen(PORT, () => {
-    console.log("Server running on port ${PORT}");
+    console.log(`Server running on port ${PORT}`);
   });
-} 
+}
