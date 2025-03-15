@@ -248,6 +248,13 @@ app.get('*', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (process.env.VERCEL) {
+  // If running on Vercel, export the app for use in a serverless function
+  module.exports = app;
+} else {
+  // If running locally, start the server normally
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
