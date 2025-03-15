@@ -2,13 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const { Groq } = require('groq-sdk');
+const {Groq} = require('groq-sdk');
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Groq client using your GROQ_API_KEY
+// Initialize Groq client using your GROQ API key
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
@@ -18,13 +18,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// API Routes
+
 // /api/chat endpoint
 app.post('/api/chat', async (req, res) => {
   try {
     const { message, mode } = req.body;
     // Generate system prompt based on mode
     const systemPrompt = getSystemPrompt(mode);
-
+    
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
@@ -37,7 +39,7 @@ app.post('/api/chat', async (req, res) => {
       stream: false,
       stop: null
     });
-
+    
     const response = completion.choices[0].message.content;
     res.json({ response });
   } catch (error) {
@@ -49,19 +51,17 @@ app.post('/api/chat', async (req, res) => {
 // /api/explainer endpoint
 app.post('/api/explainer', async (req, res) => {
   try {
-    const { concept } = req.body;
-
-    const systemPrompt = `
-You are an expert educational explainer. Create an engaging, visual, and interactive explanation of the given concept.
+    const {concept} = req.body;
+    
+    const systemPrompt = `You are an expert educational explainer. Create an engaging, visual, and interactive explanation of the given concept.
 Break it down into intuitive parts. Use analogies, examples, and step-by-step explanations. Format your response using markdown.
-Make it feel like an interactive Khan Academy style lesson.
-    `;
-
+Make it feel like an interactive Khan Academy style lesson.`;
+    
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: \`Create an engaging explainer for: \${concept}\` }
+        { role: "user", content: "Create an engaging explainer for: ${concept} "}
       ],
       temperature: 1,
       max_completion_tokens: 1024,
@@ -69,7 +69,7 @@ Make it feel like an interactive Khan Academy style lesson.
       stream: false,
       stop: null
     });
-
+    
     const response = completion.choices[0].message.content;
     res.json({ response });
   } catch (error) {
@@ -82,13 +82,11 @@ Make it feel like an interactive Khan Academy style lesson.
 app.post('/api/mentor', async (req, res) => {
   try {
     const { question } = req.body;
-
-    const systemPrompt = `
-You are an expert mentor in all subjects. Provide personalized, detailed, and actionable guidance.
+    
+    const systemPrompt = `You are an expert mentor in all subjects. Provide personalized, detailed, and actionable guidance.
 Be supportive but also challenging. Ask thoughtful questions to deepen understanding. Provide specific resources and next steps.
-Format your response in a conversational, supportive tone.
-    `;
-
+Format your response in a conversational, supportive tone.`;
+    
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
@@ -101,7 +99,7 @@ Format your response in a conversational, supportive tone.
       stream: false,
       stop: null
     });
-
+    
     const response = completion.choices[0].message.content;
     res.json({ response });
   } catch (error) {
@@ -114,18 +112,16 @@ Format your response in a conversational, supportive tone.
 app.post('/api/evaluation', async (req, res) => {
   try {
     const { topic, difficulty } = req.body;
-
-    const systemPrompt = `
-You are an expert test creator. Create a comprehensive test on the given topic at the \${difficulty} level.
+    
+    const systemPrompt = `You are an expert test creator. Create a comprehensive test on the given topic at the ${difficulty} level.
 Include a mix of multiple-choice, short answer, and problem-solving questions. Provide detailed explanations for each correct answer.
-Format the test with clear question numbering, difficulty indicators, and scoring guidance.
-    `;
-
+Format the test with clear question numbering, difficulty indicators, and scoring guidance.`;
+    
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: \`Create a \${difficulty} level test for: \${topic}\` }
+        { role: "user", content: "Create a ${difficulty} level test for: ${topic}" }
       ],
       temperature: 1,
       max_completion_tokens: 1024,
@@ -133,7 +129,7 @@ Format the test with clear question numbering, difficulty indicators, and scorin
       stream: false,
       stop: null
     });
-
+    
     const response = completion.choices[0].message.content;
     res.json({ response });
   } catch (error) {
@@ -146,16 +142,14 @@ Format the test with clear question numbering, difficulty indicators, and scorin
 app.post('/api/schedule', async (req, res) => {
   try {
     const { learningPlan, hoursPerWeek, startDate, preferredDays } = req.body;
+    
+    const systemPrompt = `You are an expert learning planner. Create a detailed schedule based on the following learning plan:
+"${learningPlan}"
 
-    const systemPrompt = `
-You are an expert learning planner. Create a detailed schedule based on the following learning plan:
-"\${learningPlan}"
+The user can dedicate ${hoursPerWeek} hours per week, starting from ${startDate}, and prefers to learn on these days: ${preferredDays.join(', ')}.
 
-The user can dedicate \${hoursPerWeek} hours per week, starting from \${startDate}, and prefers to learn on these days: \${preferredDays.join(', ')}.
-
-Create a week-by-week schedule with specific topics, estimated time commitments, and milestone goals. Format your response as HTML with appropriate classes for styling.
-    `;
-
+Create a week-by-week schedule with specific topics, estimated time commitments, and milestone goals. Format your response as HTML with appropriate classes for styling.`;
+    
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
@@ -168,7 +162,7 @@ Create a week-by-week schedule with specific topics, estimated time commitments,
       stream: false,
       stop: null
     });
-
+    
     const schedule = completion.choices[0].message.content;
     res.json({ schedule });
   } catch (error) {
@@ -181,9 +175,8 @@ Create a week-by-week schedule with specific topics, estimated time commitments,
 function getSystemPrompt(mode) {
   switch (mode) {
     case 'course':
-      return `
-You are LearnPath, an expert AI learning assistant specializing in creating personalized course plans.
-
+      return `You are LearnPath, an expert AI learning assistant specializing in creating personalized course plans.
+      
 When given a topic or learning goal:
 1. Create a detailed and structured learning path
 2. Break the course into logical modules with clear learning objectives
@@ -193,12 +186,11 @@ When given a topic or learning goal:
 6. Format your response in markdown for readability
 7. Include a comparison table of popular resources when relevant
 
-Your goal is to create a comprehensive, actionable learning plan that guides the user from their current knowledge level to mastery.
-      `;
+Your goal is to create a comprehensive, actionable learning plan that guides the user from their current knowledge level to mastery.`;
+      
     case 'examination':
-      return `
-You are LearnPath, an expert AI learning assistant specializing in examination preparation.
-
+      return `You are LearnPath, an expert AI learning assistant specializing in examination preparation.
+      
 When given an exam or certification to prepare for:
 1. Create a detailed study plan with clear milestones
 2. Break down the exam syllabus into manageable topics
@@ -207,12 +199,11 @@ When given an exam or certification to prepare for:
 5. Suggest practice tests and self-assessment methods
 6. Format your response in markdown for readability
 
-Your goal is to create a comprehensive, time-efficient study plan that maximizes the user's chances of success.
-      `;
+Your goal is to create a comprehensive, time-efficient study plan that maximizes the user's chances of success.`;
+      
     case 'jd':
-      return `
-You are LearnPath, an expert AI learning assistant specializing in career skill development.
-
+      return `You are LearnPath, an expert AI learning assistant specializing in career skill development.
+      
 When given a job description or career goal:
 1. Analyze the key skills and competencies required
 2. Create a detailed skill development plan
@@ -221,12 +212,11 @@ When given a job description or career goal:
 5. Include tips for networking and interview preparation
 6. Format your response in markdown for readability
 
-Your goal is to create a comprehensive plan that helps the user develop the skills needed for their target job or career.
-      `;
+Your goal is to create a comprehensive plan that helps the user develop the skills needed for their target job or career.`;
+      
     case 'business':
-      return `
-You are LearnPath, an expert AI learning assistant specializing in business education.
-
+      return `You are LearnPath, an expert AI learning assistant specializing in business education.
+      
 When given a business concept or entrepreneurial goal:
 1. Create a comprehensive learning framework covering all aspects of the business
 2. Include key business concepts, models, and strategies
@@ -235,13 +225,12 @@ When given a business concept or entrepreneurial goal:
 5. Include resource recommendations for deeper learning
 6. Format your response in markdown for readability
 
-Your goal is to provide a comprehensive business education plan that helps the user understand and apply business principles effectively.
-      `;
+Your goal is to provide a comprehensive business education plan that helps the user understand and apply business principles effectively.`;
+      
     case 'query':
     default:
-      return `
-You are LearnPath, a helpful AI learning assistant with expertise across various fields.
-
+      return `You are LearnPath, a helpful AI learning assistant with expertise across various fields.
+      
 When answering queries:
 1. Provide clear, accurate, and comprehensive information
 2. Include relevant background context when helpful
@@ -249,12 +238,11 @@ When answering queries:
 4. Use examples to illustrate complex concepts
 5. Format your response in markdown for readability
 
-Your goal is to provide helpful, educational responses that expand the user's understanding.
-      `;
+Your goal is to provide helpful, educational responses that expand the user's understanding.`;
   }
 }
 
-// Test endpoint must come before the wildcard
+// Make sure it's a GET route:
 app.get('/api/test', (req, res) => {
   const key = process.env.GROQ_API_KEY;
   res.json({
@@ -262,6 +250,7 @@ app.get('/api/test', (req, res) => {
     keyLength: key ? key.length : 0
   });
 });
+
 
 // Serve the main HTML file for all non-API routes
 app.get('*', (req, res) => {
@@ -275,6 +264,6 @@ if (process.env.VERCEL) {
 } else {
   // If running locally, start the server normally
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log("Server running on port ${PORT}");
   });
-}
+} 
