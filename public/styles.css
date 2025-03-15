@@ -52,17 +52,16 @@ header p {
     color: var(--gray);
 }
 
+/* App container now allows scrolling if needed */
 .app-container {
-  display: flex;
-  background-color: white;
-  border-radius: 12px;
-  /* overflow: hidden;  <-- Remove or comment out */
-  overflow: auto;       /* Optionally allow scrolling */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 150px);
-  min-height: 600px;
+    display: flex;
+    background-color: white;
+    border-radius: 12px;
+    overflow: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 150px);
+    min-height: 600px;
 }
-
 
 /* Sidebar Styles */
 .sidebar {
@@ -156,7 +155,7 @@ header p {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* Removed overflow: hidden; to allow content to be fully visible */
 }
 
 .chat-container {
@@ -179,6 +178,7 @@ header p {
     color: var(--gray);
 }
 
+/* Chat messages area scrolls if content exceeds available space */
 .chat-messages {
     flex: 1;
     padding: 20px;
@@ -220,18 +220,18 @@ header p {
     border-bottom-left-radius: 4px;
 }
 
+/* Chat input remains visible at the bottom */
 .chat-input {
-  padding: 15px;
-  border-top: 1px solid var(--light-gray);
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;           /* Prevent shrinking */
-  position: sticky;         /* Make the input sticky */
-  bottom: 0;                /* Stick to the bottom */
-  background: #f9fafb;       /* Set a background color */
-  z-index: 10;              /* Ensure it stays on top */
+    padding: 15px;
+    border-top: 1px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background: #f9fafb;
+    z-index: 10;
 }
-
 
 .chat-input textarea {
     flex: 1;
