@@ -18,17 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/api/test', (req, res) => {
-  // Check if GROQ_API_KEY is present
-  const key = process.env.GROQ_API_KEY;
-
-  res.json({
-    keyPresent: !!key,            // true or false
-    keyLength: key ? key.length : 0 // length of the string
-  });
-});
-
-
 // /api/chat endpoint
 app.post('/api/chat', async (req, res) => {
   try {
@@ -264,6 +253,15 @@ Your goal is to provide helpful, educational responses that expand the user's un
       `;
   }
 }
+
+// Test endpoint must come before the wildcard
+app.get('/api/test', (req, res) => {
+  const key = process.env.GROQ_API_KEY;
+  res.json({
+    keyPresent: !!key,
+    keyLength: key ? key.length : 0
+  });
+});
 
 // Serve the main HTML file for all non-API routes
 app.get('*', (req, res) => {
