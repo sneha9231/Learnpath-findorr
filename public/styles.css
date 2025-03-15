@@ -53,14 +53,16 @@ header p {
 }
 
 .app-container {
-    display: flex;
-    background-color: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    height: calc(100vh - 150px);
-    min-height: 600px;
+  display: flex;
+  background-color: white;
+  border-radius: 12px;
+  /* overflow: hidden;  <-- Remove or comment out */
+  overflow: auto;       /* Optionally allow scrolling */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 150px);
+  min-height: 600px;
 }
+
 
 /* Sidebar Styles */
 .sidebar {
