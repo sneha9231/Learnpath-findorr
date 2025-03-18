@@ -247,7 +247,8 @@ app.get('/api/test', (req, res) => {
   const key = process.env.GROQ_API_KEY;
   res.json({
     keyPresent: !!key,
-    keyLength: key ? key.length : 0
+    keyLength: key ? key.length : 0,
+    message: 'API test endpoint is working'
   });
 });
 
@@ -256,13 +257,12 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start server
-if (process.env.VERCEL) {
-  // If running on Vercel, export the app for use in a serverless function
-  module.exports = app;
-} else {
-  // If running locally, start the server normally
+// For local development: start the server
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
+
+// Export the Express app for Vercel serverless functions
+module.exports = app;
