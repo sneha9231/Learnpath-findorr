@@ -486,3 +486,150 @@ header p {
         max-width: 90%;
     }
 }
+
+/* Enhanced message styling */
+.message-content {
+    padding: 16px;
+    border-radius: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.5;
+    overflow-wrap: break-word;
+}
+
+/* Bot message specific styling */
+.message.bot .message-content {
+    background-color: white;
+    color: var(--dark);
+    border-bottom-left-radius: 4px;
+}
+
+/* User message specific styling */
+.message.user .message-content {
+    background-color: var(--primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Style for markdown elements inside bot messages */
+.message.bot .message-content h1 {
+    font-size: 1.6rem;
+    margin: 1rem 0 0.8rem;
+    color: var(--primary);
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 0.3rem;
+}
+
+.message.bot .message-content h2 {
+    font-size: 1.4rem;
+    margin: 1rem 0 0.7rem;
+    color: var(--primary-dark);
+}
+
+.message.bot .message-content h3 {
+    font-size: 1.2rem;
+    margin: 0.9rem 0 0.6rem;
+    color: var(--dark);
+}
+
+/* Code block styling */
+.message.bot .message-content pre {
+    background-color: #f1f5f9;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 0.8rem 0;
+    overflow-x: auto;
+}
+
+.message.bot .message-content code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    background-color: #f1f5f9;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.message.bot .message-content pre code {
+    padding: 0;
+    background-color: transparent;
+}
+
+/* List styling */
+.message.bot .message-content ul, 
+.message.bot .message-content ol {
+    padding-left: 1.5rem;
+    margin: 0.8rem 0;
+}
+
+.message.bot .message-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Link styling */
+.message.bot .message-content a {
+    color: var(--primary);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--primary);
+}
+
+.message.bot .message-content a:hover {
+    border-bottom: 1px solid var(--primary);
+}
+
+/* Table styling */
+.message.bot .message-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.message.bot .message-content th,
+.message.bot .message-content td {
+    border: 1px solid var(--light-gray);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.message.bot .message-content th {
+    background-color: #f1f5f9;
+}
+
+/* Blockquotes styling */
+.message.bot .message-content blockquote {
+    border-left: 4px solid var(--primary-light);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--gray);
+    font-style: italic;
+}
+
+/* Image styling */
+.message.bot .message-content img {
+    max-width: 100%;
+    border-radius: 6px;
+    margin: 0.8rem 0;
+}
+
+/* Horizontal rule */
+.message.bot .message-content hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--light-gray);
+    margin: 1.5rem 0;
+}
+
+/* Adds a nice "typing" animation */
+@keyframes typing {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+.typing-dots {
+    display: inline-block;
+}
+
+.typing-dots::after {
+    content: '...';
+    display: inline-block;
+    animation: typing 1.5s infinite;
+}

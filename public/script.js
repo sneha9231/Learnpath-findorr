@@ -47,34 +47,16 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
-    // Simple markdown formatter (handles basic formatting)
-    function formatMessage(text) {
-        // Handle bold
-        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        
-        // Handle italics
-        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        
-        // Handle links
-        text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
-        
-        // Handle line breaks
-        text = text.replace(/\n/g, '<br>');
-        
-        // Handle headers
-        text = text.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
-        text = text.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
-        text = text.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
-        
-        // Handle lists
-        text = text.replace(/^- (.*?)$/gm, '<li>$1</li>');
-        
-        // Wrap adjacent list items in ul
-        text = text.replace(/(<li>.*?<\/li>)([\s]*)?(?=<li>)/g, '$1');
-        text = text.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
-        
-        return text;
-    }
+    // Use the marked library for proper markdown parsing
+function formatMessage(text) {
+    const markedOptions = {
+        breaks: true,
+        gfm: true
+    };
+    
+    // Use DOMPurify to sanitize the HTML from marked
+    return DOMPurify.sanitize(marked.parse(text, markedOptions));
+}
     
     // Function to send user message and get AI response
     async function sendMessage() {
